@@ -5,7 +5,7 @@ require_once __DIR__ . '/../Models/User.php';
 use App\Models\User;
 use App\Utility\Auth;
 use App\Utility\Session;
-use App\Utility\Mailer;
+
 
 class AuthController
 {
@@ -97,7 +97,6 @@ class AuthController
             header('Location: /Auth/register');
             exit;
         }
-        $confirmation = Mailer::send_email_verification($_SESSION['user_email']);
         if ($confirmation != -1)
         {
             $_SESSION['confirmation_code'] = $confirmation;
@@ -113,40 +112,6 @@ class AuthController
         }
     }
 
-    public function confirm()
-    {
-        Session::session_init();
-        error_log("In confirmation(), expected code: " . $_SESSION['confirmation_code']);
-        if ($_SESSION['confirmation_code'])
-        {
-            if ($_SERVER['REQUEST_METHOD'] === "GET")
-            {
-                include __DIR__ . ("/../Views/confirm.php");
-                exit;
-            }
-            $code = $_POST['code'];
-            if ($_SESSION['confirmation_code'] === (int)$code)
-            {
-                unset($_SESSION['confirmation_code']);
-                Session::reset_key("error");
-                $hashedPassword = password_hash($_SESSION['user_password'], PASSWORD_DEFAULT);
-                User::create($_SESSION['user_name'], $_SESSION['user_email'], $hashedPassword);
-                $user = User::findByEmail($email);
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['success'] = "Registration successful. Please log in.";
-                header('Location: /Auth/login');
-                exit;
-            }
-            else
-            {
-                $_SESSION['error'] = "Wrong confirmation code. Try again";
-                include __DIR__ . ("/../Views/confirm.php");
-                exit;               
-            }
-        }
-        header('Location: /Auth');
-        exit;
-    }
     public function logout()
     {
         

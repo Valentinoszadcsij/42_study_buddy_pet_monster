@@ -31,18 +31,6 @@ services:
       - mariadb
     networks:
      - app-network
-
-  mailhog:
-    image: mailhog/mailhog
-    container_name: "mailhog"
-    restart: always
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-    depends_on:
-      - php
-    networks:
-      - app-network
   
   nginx:
     build:
