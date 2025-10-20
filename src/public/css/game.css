@@ -1,5 +1,5 @@
 body {
-  background: #DCE3E6;
+  background: #ffffff;
   font-family: "Press Start 2P", system-ui;
 }
 
@@ -24,7 +24,7 @@ body {
 /* Button styles */
 button {
   color: #fff;
-  background-color: #6abc3a;
+  background-color: #045153;
   padding: 15px 40px 15px 40px;
   margin: 10px;
   font-size: 14px;
@@ -41,23 +41,23 @@ button:active {
 
 /* Special colors for different buttons */
 .nav-buttons button:nth-child(1) {
-    background-color: #d83434;
+    background-color: #045153;
 }
 .nav-buttons button:nth-child(2) {
-    background-color: #38667f;
+    background-color: #045153;
 }
 .nav-buttons button:nth-child(3) {
-    background-color: #9f7db1;
+    background-color: #045153;
 }
 
 .right-side button:nth-child(1) {
-    background-color: #FF5722;
+    background-color: #045153;
 }
 .right-side button:nth-child(2) {
-    background-color: #009688;
+    background-color: #045153;
 }
 .right-side button:nth-child(3) {
-    background-color: #6abc3a;
+    background-color: #045153;
 }
 
 /* HP Bar styles */
@@ -84,8 +84,8 @@ button:active {
 }
 
 :root {
-   --bar-fill: #57e705;
-   --bar-top: #6aff03;
+   --bar-fill: #00babd;
+   --bar-top: #69ecee;
    --pixel-size: 4;
 }
 
@@ -249,12 +249,12 @@ button:active {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #e8e8e8;
+  color: #045153;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   padding: 0.5em 1em;
-  background: linear-gradient(45deg, #1A2B3C, #22374A);
-  border-radius: 0.5em;
-  border: 2px solid #4A90E2;
+  /* background: linear-gradient(45deg, #1A2B3C, #22374A); */
+  /* border-radius: 0.5em; */
+  /* border: 2px solid #4A90E2; */
 }
 
 .character-section {
@@ -278,14 +278,22 @@ button:active {
 }
 
 .coins {
-  position: fixed;
-  right: 20px;
-  top: 50%;
-  background: #FFD700;
-  border-radius: 50%;
-  padding: 1rem;
+  /* position: fixed;
+  right: 20px; */
+  /* top: 50%; */
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  color: #00babd;
+  /* background: #FFD700; */
+  /* border-radius: 50%; */
+  /* padding: 1rem; */
+  display: flex;
+  align-items: center;
+  /* gap: 0.5rem; */
   font-weight: bold;
+}
+
+.bg-secondary
+{
+	background-color: #e0e0e0;
 }

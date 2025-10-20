@@ -8,8 +8,8 @@ function renderHealth() {
    let percent = health / maxHp * 100;
 
    // Update color based on health percentage
-   document.documentElement.style.setProperty('--bar-fill', '#57e705');
-   document.documentElement.style.setProperty('--bar-top',  '#6aff03');
+   document.documentElement.style.setProperty('--bar-fill', '#00babd');
+   document.documentElement.style.setProperty('--bar-top',  '#3cf3f7ff');
 
    if (percent <= 50) { // yellows
       document.documentElement.style.setProperty('--bar-fill', '#d6ed20');

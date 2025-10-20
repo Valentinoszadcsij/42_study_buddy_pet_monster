@@ -15,8 +15,8 @@ function renderExp() {
 
    // Set the blue color scheme for the experience bar
    // Can be extended to show different shades based on exp milestones
-   document.documentElement.style.setProperty('--exp-fill', '#0396FF');
-   document.documentElement.style.setProperty('--exp-top',  '#32CCFF');
+   document.documentElement.style.setProperty('--exp-fill', '#00babd');
+   document.documentElement.style.setProperty('--exp-top',  '#2ee7ebff');
 
    // Update the experience text and match its color to the bar
    expText.textContent = `EXP: ${Math.round(percent)}%`;

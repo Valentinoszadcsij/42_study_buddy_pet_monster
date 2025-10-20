@@ -1,11 +1,14 @@
 html, body {
     padding: 0;
     margin: 0;
+	background-color: #E0E0E0;
 }
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     text-align: center;
     padding: 10px;
+	background-color: #E0E0E0;
+
 }
 
 body * {
@@ -94,10 +97,10 @@ button {
 
 /* colors */
 .bg-primary {
-    background-color: #1A2B3C;
+    background-color: #ffffff;
 }
 .bg-secondary {
-    background-color: #22374A;
+    background-color: #ffffff;
 }
 .txt-primary {
     color: #E0E0E0;
@@ -106,7 +109,7 @@ button {
     color: #5B6A7A;
 }
 .txt-blue {
-    color: #4A90E2;
+    color: #00babd;
 }
 
 /* borders */
@@ -123,7 +126,7 @@ button {
   cursor: pointer;
 }
 .icon-btn:hover {
-    background: linear-gradient(270deg, #ff0047, #2c34c7, #00f260, #ff0047);
+    background: linear-gradient(270deg, #045153, #045153, #045153, #045153);
     background-size: 600% 600%;
     animation: gradientShift 3s ease infinite;
 }
@@ -150,4 +153,3 @@ button {
     background-position: 0% 50%;
   }
 }
-
