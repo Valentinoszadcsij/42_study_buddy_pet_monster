@@ -1,0 +1,103 @@
+.top-nav {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 0;
+}
+
+.nav-items {
+    display: flex;
+    justify-content: space-between;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+}
+
+.game-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.stats-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.intraname {
+    padding: 10px 20px;
+    border: 2px solid #000;
+    display: inline-block;
+}
+
+.stat-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.exp-btn, .lvl-btn {
+    padding: 5px 10px;
+    border: 1px solid #000;
+    background: none;
+    cursor: pointer;
+}
+
+.character-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.character-section canvas {
+    width: 256px;
+    height: 256px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges; /* Fallback for compatibility */
+}
+
+.exp-bar {
+    width: 200px;
+    height: 20px;
+    border: 1px solid red;
+    margin: 20px auto;
+    position: relative;
+}
+
+.exp-progress {
+    height: 100%;
+    width: 50%;
+    background-color: red;
+}
+
+.inventory-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.food-clothes {
+    padding: 10px;
+    border: 2px solid green;
+}
+
+.inventory {
+    padding: 10px;
+    border: 2px solid magenta;
+}
+
+.coins {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    background: yellow;
+    border-radius: 50%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
