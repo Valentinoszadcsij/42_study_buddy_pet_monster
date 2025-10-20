@@ -1,0 +1,70 @@
+services:
+  mariadb:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.mariadb
+    image: mariadb
+    container_name: "mariadb"
+    restart: always
+    ports:
+      - "3306:3306"
+    env_file: ".env"
+    volumes: 
+      - maria-db:/var/lib/mysql
+      - ./mariadb/init-tables.sql:/docker-entrypoint-initdb.d/init-tables.sql
+    networks:
+      - app-network
+  
+  php:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.php
+    image: php
+    container_name: "php"
+    restart: always
+    ports:
+     - "9000:9000"
+    env_file: ".env"
+    volumes:
+     - ./src:/var/www/html
+    depends_on:
+      - mariadb
+    networks:
+     - app-network
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: "mailhog"
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    depends_on:
+      - php
+    networks:
+      - app-network
+  
+  nginx:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.nginx
+    image: nginx
+    container_name: "nginx"
+    restart: "always"
+    ports:
+      - "8443:443"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - php
+    networks:
+      - app-network
+    
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  maria-db:
+
+
+    
