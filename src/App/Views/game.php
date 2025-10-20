@@ -6,42 +6,52 @@
     <title>42Mochi</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/game.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body class="bg-secondary">
-    <nav class="navbar bg-primary bord-primary">
-        <div class="navbar-left">42Mochi</div>
-        <div class="navbar-center"></div>
-        <div class="navbar-right">
-            <form method="POST" action="/Auth/logout">
-                <button type="submit" class="icon-btn logout" aria-label="Log out"></button>
-            </form>
+    <nav class="navbar">
+        <div class="nav-buttons">
+            <button>Event</button>
+            <button>Friends</button>
+            <button>Heilbronn 42</button>
         </div>
     </nav>
 
     <main class="game-container">
-        <div class="stats-section">
-            <div class="intraname"><?php echo $_SESSION['user_email'] ?? 'Intraname'; ?></div>
-            <div class="stat-buttons">
-                <button class="exp-btn">Exp</button>
-                <button class="lvl-btn">Lvl</button>
+        <div class="left-side">
+            <div class="ep-counter">
+                E.P.: <span id="ep-value">100</span>
             </div>
         </div>
 
-        <div class="character-section">
-            <canvas id="characterCanvas" width="200" height="200"></canvas>
-            <div class="exp-bar">
-                <div class="exp-progress"></div>
+        <div class="center-content">
+            <div class="intraname">vpushkar</div>
+            <div class="lvl-container">
+                <div class="lvl-text">LVL 4 (75%)</div>
+                <div class="lvl-bar">
+                    <progress class="progress-bar" value="75" max="100"></progress>
+                </div>
+            </div>
+            <div class="character-section">
+                <canvas id="characterCanvas" width="256" height="256"></canvas>
+                <div class="hp-container">
+                    <div class="hp-text">HP (85%)</div>
+                    <div class="hp-bar">
+                        <progress class="progress-bar" value="85" max="100"></progress>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="inventory-section">
-            <div class="food-clothes">Food/Clothes</div>
-            <div class="inventory">Inventory</div>
+        <div class="right-side">
+            <button>Food</button>
+            <button>Clothes</button>
+            <button>Inventory</button>
         </div>
 
         <div class="coins">
             <span class="coin-icon">🪙</span>
-            <span class="coin-amount">0</span>
+            <span class="coin-amount">100</span>
         </div>
     </main>
     <script src="/js/character.js"></script>
