@@ -83,6 +83,12 @@ button:active {
   background: transparent;
 }
 
+:root {
+   --bar-fill: #57e705;
+   --bar-top: #6aff03;
+   --pixel-size: 4;
+}
+
 .hp-container {
   display: flex;
   align-items: center;
@@ -93,25 +99,31 @@ button:active {
 .hp-text {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #BE2A20;
+  color: var(--bar-fill);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   min-width: 100px;
 }
 
-.hp-bar .progress-bar::-webkit-progress-value {
-  border-radius: 0.35em;
-  box-shadow: inset 0 0.05em 0.05em rgba(255, 255, 255, 0.35);
-  background:
-    linear-gradient(rgba(226, 102, 76, 0.65), transparent),
-    repeating-linear-gradient(135deg, #A22215 0 0.25em, #BE2A20 0 0.5em);
+.healthbar {
+   width: calc(38px * var(--pixel-size));
+   margin: 0 auto;
+   display: block;
+   image-rendering: pixelated;
+   image-rendering: crisp-edges;
 }
 
-.hp-bar .progress-bar::-moz-progress-bar {
-  border-radius: 0.35em;
-  box-shadow: inset 0 0.05em 0.05em rgba(255, 255, 255, 0.35);
-  background:
-    linear-gradient(rgba(226, 102, 76, 0.65), transparent),
-    repeating-linear-gradient(135deg, #A22215 0 0.25em, #BE2A20 0 0.5em);
+.healthbar_fill {
+   fill: var(--bar-fill);
+   transition: width 0.1s ease-in, fill 0.2s linear;
+}
+
+.healthbar_fill-top {
+   fill: var(--bar-top);
+}
+
+:root {
+  --exp-fill: #0396FF;
+  --exp-top: #32CCFF;
 }
 
 .lvl-container {
@@ -124,25 +136,26 @@ button:active {
 .lvl-text {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #FFE94B;
+  color: var(--exp-fill);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   min-width: 100px;
 }
 
-.lvl-bar .progress-bar::-webkit-progress-value {
-  border-radius: 0.35em;
-  box-shadow: inset 0 0.05em 0.05em rgba(255, 255, 255, 0.35);
-  background:
-    linear-gradient(#FFEC9D, transparent 85%),
-    linear-gradient(90deg, #FFE94B, #F94745);
+.expbar {
+   width: calc(38px * var(--pixel-size));
+   margin: 0 auto;
+   display: block;
+   image-rendering: pixelated;
+   image-rendering: crisp-edges;
 }
 
-.lvl-bar .progress-bar::-moz-progress-bar {
-  border-radius: 0.35em;
-  box-shadow: inset 0 0.05em 0.05em rgba(255, 255, 255, 0.35);
-  background:
-    linear-gradient(#FFEC9D, transparent 85%),
-    linear-gradient(90deg, #FFE94B, #F94745);
+.expbar_fill {
+   fill: var(--exp-fill);
+   transition: width 0.1s ease-in, fill 0.2s linear;
+}
+
+.expbar_fill-top {
+   fill: var(--exp-top);
 }[type="range"].kawaii::-webkit-slider-runnable-track {
   background:
     radial-gradient(circle at 0.75em 0.6em, var(--light) calc(0.2em - 1px), #0000 0.2em),
