@@ -77,6 +77,47 @@ class AuthController
             $_SESSION['first_login_date'] = date('Y-m-d');
         }
 
+        // --- 3.5️⃣ Fetch user info and coalition immediately ---
+        $access_token = $data['access_token'];
+
+        // Fetch user info
+        $ch = curl_init("https://api.intra.42.fr/v2/me");
+        curl_setopt_array($ch, [
+            CURLOPT_HTTPHEADER => ["Authorization: Bearer $access_token"],
+            CURLOPT_RETURNTRANSFER => true
+        ]);
+        $user_json = curl_exec($ch);
+        curl_close($ch);
+        $user = json_decode($user_json, true);
+
+        if (is_array($user)) {
+            $_SESSION['user_info'] = $user;
+
+            // Fetch coalition info
+            $coalition = 'None';
+            $color = '#6abc3a';
+            $user_id = $user['id'] ?? null;
+
+            if ($user_id) {
+                $coal_url = "https://api.intra.42.fr/v2/users/{$user_id}/coalitions";
+                $ch = curl_init($coal_url);
+                curl_setopt_array($ch, [
+                    CURLOPT_HTTPHEADER => ["Authorization: Bearer $access_token"],
+                    CURLOPT_RETURNTRANSFER => true
+                ]);
+                $coal_json = curl_exec($ch);
+                curl_close($ch);
+                $coal_data = json_decode($coal_json, true);
+
+                if (is_array($coal_data) && count($coal_data) > 0) {
+                    $coalition = $coal_data[0]['name'] ?? 'None';
+                    $color = $coal_data[0]['color'] ?? '#6abc3a';
+                }
+            }
+
+            $_SESSION['coalition_info'] = ['coalition' => $coalition, 'color' => $color];
+        }
+
         // --- 4️⃣ Redirect to dashboard ---
         header('Location: ' . $_SESSION['end_url']);
         exit;
@@ -84,13 +125,13 @@ class AuthController
 
     public function logout()
     {
-        
+
         // Expire the session cookie on the client
         if (ini_get("session.use_cookies")) {
-    
+
             // Clear session variables
             $_SESSION = [];
-    
+
             // Destroy session on the server
             session_destroy();
             $params = session_get_cookie_params();
