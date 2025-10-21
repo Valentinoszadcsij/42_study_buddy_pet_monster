@@ -122,18 +122,31 @@ class Character {
             if (this.currentFrame > this.states[this.currentState].to) {
                 this.currentFrame = this.states[this.currentState].from;
 
-                // When animation cycle completes and HP < 50, alternate between Hungry and Idle
-                if (this.isAutoAnimating && this.currentHP < 50) {
+                // When animation cycle completes, check HP and alternate animations
+                if (this.isAutoAnimating) {
                     this.animationCycleCount++;
 
-                    // Pattern: 3x Idle, 1x Hungry
-                    if (this.currentState === 'Hungry') {
-                        // After Hungry, switch to Idle
-                        this.setState('Idle');
-                    } else if (this.currentState === 'Idle' && this.animationCycleCount >= 3) {
-                        // After 3 Idle cycles, switch to Hungry
-                        this.setState('Hungry');
-                        this.animationCycleCount = 0;
+                    // HP = 100: Pattern 3x Idle, 1x Happy
+                    if (this.currentHP === 100) {
+                        if (this.currentState === 'Happy') {
+                            // After Happy, switch to Idle
+                            this.setState('Idle');
+                        } else if (this.currentState === 'Idle' && this.animationCycleCount >= 5) {
+                            // After 3 Idle cycles, switch to Happy
+                            this.setState('Happy');
+                            this.animationCycleCount = 0;
+                        }
+                    }
+                    // HP < 50: Pattern 3x Idle, 1x Hungry
+                    else if (this.currentHP < 50) {
+                        if (this.currentState === 'Hungry') {
+                            // After Hungry, switch to Idle
+                            this.setState('Idle');
+                        } else if (this.currentState === 'Idle' && this.animationCycleCount >= 5) {
+                            // After 3 Idle cycles, switch to Hungry
+                            this.setState('Hungry');
+                            this.animationCycleCount = 0;
+                        }
                     }
                 }
             }
@@ -147,15 +160,20 @@ class Character {
     updateHP(hp) {
         this.currentHP = hp;
 
-        // Enable auto-animation when HP < 50
-        if (hp < 50 && !this.isAutoAnimating) {
+        // Enable auto-animation when HP = 100 (Happy) or HP < 50 (Hungry)
+        if ((hp === 100 || hp < 50) && !this.isAutoAnimating) {
             this.isAutoAnimating = true;
             this.animationCycleCount = 0;
-            console.log('Auto-animation enabled: HP < 50');
-        } else if (hp >= 50 && this.isAutoAnimating) {
+            if (hp === 100) {
+                console.log('Auto-animation enabled: HP = 100 (Happy mode)');
+            } else {
+                console.log('Auto-animation enabled: HP < 50 (Hungry mode)');
+            }
+        } else if (hp > 50 && hp < 100 && this.isAutoAnimating) {
+            // Disable auto-animation when HP is between 50 and 100 (not including 100)
             this.isAutoAnimating = false;
             this.setState('Idle');
-            console.log('Auto-animation disabled: HP >= 50');
+            console.log('Auto-animation disabled: HP in normal range (50-99)');
         }
     }
 
