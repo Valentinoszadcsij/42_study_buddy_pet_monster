@@ -25,7 +25,7 @@ function adjustBrightness($hex, $steps) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>42Buddy - <?= htmlspecialchars($displayname ?? 'Guest') ?></title>
+    <title>42Mochi - <?= htmlspecialchars($displayname ?? 'Guest') ?></title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/game.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -40,7 +40,7 @@ function adjustBrightness($hex, $steps) {
 <body class="bg-secondary" data-coalition="<?= htmlspecialchars($coalition ?? 'None') ?>">
     <nav class="navbar">
         <div class="nav-buttons">
-		    <button>42Buddy</button>
+		    <button>42Mochi</button>
             <button>Projects</button>
             <button>Friends</button>
             </div>
@@ -91,6 +91,7 @@ function adjustBrightness($hex, $steps) {
 
         <div id="store-modal" class="modal hidden">
             <div class="modal-content">
+                <button class="modal-close" onclick="toggleModal('store')">&times;</button>
                 <h2>Store</h2>
                 <div class="store-tabs">
                     <button class="tab-button active" onclick="openTab('store-food')">Food</button>
@@ -116,6 +117,7 @@ function adjustBrightness($hex, $steps) {
 
         <div id="inventory-modal" class="modal hidden">
             <div class="modal-content">
+                <button class="modal-close" onclick="toggleModal('inventory')">&times;</button>
                 <h2>Inventory</h2>
                 <div class="inventory-grid">
                     <!-- Inventory items will be dynamically added here -->
