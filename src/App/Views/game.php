@@ -40,8 +40,8 @@ function adjustBrightness($hex, $steps) {
 <body class="bg-secondary" data-coalition="<?= htmlspecialchars($coalition ?? 'None') ?>">
     <nav class="navbar">
         <div class="nav-buttons">
-            <button onclick="window.location.href='/home'">42Buddy</button>
-            <button onclick="window.location.href='/pairup'">PairUp</button>
+            <button onclick="window.location.href='/home'">42Mochi</button>
+            <button onclick="window.location.href='/teamup'">TeamUp</button>
             <button class="active" onclick="window.location.href='/friends'">Friends</button>
         </div>
     </nav>

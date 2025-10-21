@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PairUp | 42Buddy</title>
-
+  <title>42Mochi | TeamUp - <?= htmlspecialchars($displayname ?? 'Guest') ?></title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/game.css">
 
-  <link rel="stylesheet" href="/css/pairup.css">
+  <link rel="stylesheet" href="/css/teamup.css">
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -16,18 +15,16 @@
 
 <body class="bg-secondary">
 
-  <nav class="navbar">
-    <div class="nav-buttons">
-      <button onclick="window.location.href='/home'">42Buddy</button>
-      <button class="active" onclick="window.location.href='/pairup'">PairUp</button>
-      <button>Friends</button>
-      <button>Store</button>
-      <button>Inventory</button>
-    </div>
-  </nav>
+    <nav class="navbar">
+        <div class="nav-buttons">
+            <button onclick="window.location.href='/home'">42Mochi</button>
+            <button onclick="window.location.href='/teamup'">TeamUp</button>
+            <button class="active" onclick="window.location.href='/friends'">Friends</button>
+        </div>
+    </nav>
 
   <main class="content-box">
-    <h1>PairUp</h1>
+    <h1>TeamUp</h1>
 
     <!-- Find a Partner -->
     <section>
@@ -102,6 +99,6 @@
     </div>
   </div>
 
-  <script src="/js/pairup.js"></script>
+  <script src="/js/teamup.js"></script>
 </body>
 </html>

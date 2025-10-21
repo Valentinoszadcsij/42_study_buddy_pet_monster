@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Friends | 42Buddy</title>
+  <title>42Mochi | Friends - <?= htmlspecialchars($displayname ?? 'Guest') ?></title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/game.css">
   <link rel="stylesheet" href="/css/friends.css">
@@ -11,15 +11,13 @@
 </head>
 
 <body class="bg-secondary">
-  <nav class="navbar">
-    <div class="nav-buttons">
-      <button onclick="window.location.href='/home'">42Buddy</button>
-      <button onclick="window.location.href='/pairup'">PairUp</button>
-      <button class="active" onclick="window.location.href='/friends'">Friends</button>
-      <button onclick="window.location.href='#'">Store</button>
-      <button onclick="window.location.href='#'">Inventory</button>
-    </div>
-  </nav>
+      <nav class="navbar">
+        <div class="nav-buttons">
+            <button onclick="window.location.href='/home'">42Mochi</button>
+            <button onclick="window.location.href='/teamup'">TeamUp</button>
+            <button class="active" onclick="window.location.href='/friends'">Friends</button>
+        </div>
+    </nav>
 
   <main class="friends-container">
     <h1>Friends Network</h1>
