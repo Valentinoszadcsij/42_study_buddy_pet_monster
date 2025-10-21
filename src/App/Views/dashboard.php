@@ -98,6 +98,6 @@
         <?php endforeach; ?>
     </table>
 </div>
-
+<script>console.log(<?php echo json_encode($_SESSION); ?>);</script>
 </body>
 </html>

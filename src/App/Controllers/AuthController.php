@@ -12,7 +12,6 @@ class AuthController
 {
     public function index()
     {
-        session_start();
         $config = require dirname(__DIR__) . '/Utility/config.php';
 
         // var_dump($config);
@@ -36,7 +35,8 @@ class AuthController
 
     public function callback()
     {
-        session_start();
+        // var_dump($_SESSION['end_url']);
+        // exit;
 
         // --- 1️⃣ Verify we have code + state ---
         if (!isset($_GET['code']) || !isset($_GET['state']) || $_GET['state'] !== ($_SESSION['state'] ?? '')) {
@@ -78,7 +78,7 @@ class AuthController
         }
 
         // --- 4️⃣ Redirect to dashboard ---
-        header('Location: /Dashboard');
+        header('Location: ' . $_SESSION['end_url']);
         exit;
     }
 
@@ -87,7 +87,6 @@ class AuthController
         
         // Expire the session cookie on the client
         if (ini_get("session.use_cookies")) {
-            session_start();
     
             // Clear session variables
             $_SESSION = [];

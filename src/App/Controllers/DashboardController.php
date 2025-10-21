@@ -6,8 +6,6 @@ class DashboardController
 
     public function index()
     {
-        session_start();
-    
         // ============================================================
         // 🔄 Ensure authentication
         // ============================================================
@@ -81,11 +79,11 @@ class DashboardController
         // ============================================================
         // 3️⃣ GAME VARIABLES INITIALIZATION
         // ============================================================
-        if (!isset($_SESSION['monster_hp'])) $_SESSION['monster_hp'] = 100;
-        if (!isset($_SESSION['food'])) $_SESSION['food'] = 5;
-        if (!isset($_SESSION['monster_level'])) $_SESSION['monster_level'] = 1;
-        if (!isset($_SESSION['coins'])) $_SESSION['coins'] = 500;
-        if (!isset($_SESSION['hunger'])) $_SESSION['hunger'] = 100;
+        if (!isset($_SESSION['mochi_hp'])) $_SESSION['mochi_hp'] = 100;
+        if (!isset($_SESSION['mochi_age'])) $_SESSION['mochi_age'] = 0;
+        if (!isset($_SESSION['int_food'])) $_SESSION['int_food'] = 10;
+        if (!isset($_SESSION['char_food'])) $_SESSION['char_food'] = 10;
+        if (!isset($_SESSION['coins'])) $_SESSION['coins'] = 100;
         if (!isset($_SESSION['coin_log'])) $_SESSION['coin_log'] = [];
     
         function log_action($desc, $delta = 0) {
@@ -105,8 +103,8 @@ class DashboardController
     
             // Simulate time tick
             if (isset($_POST['tick'])) {
-                $_SESSION['hunger'] = max(0, $_SESSION['hunger'] - 5);
-                if ($_SESSION['hunger'] < 20) {
+                $_SESSION['mochi_hp'] = max(0, $_SESSION['mochi_hp'] - 5);
+                if ($_SESSION['mochi_hp'] == 0) {
                     $_SESSION['monster_hp'] = max(0, $_SESSION['monster_hp'] - 5);
                 }
                 log_action("Tick passed", 0);
@@ -204,6 +202,6 @@ class DashboardController
         $hunger = $_SESSION['hunger'];
         $coin_log = array_reverse($_SESSION['coin_log']); // newest first
 
-        include __DIR__ . "/../Views/game.php";
+        include __DIR__ . "/../Views/dashboard.php";
     }
 }

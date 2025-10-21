@@ -7,7 +7,6 @@ class HomeController
 {
     public function index()
     {
-        Session::session_init();
         include __DIR__ . "/../Views/game.php";
     }
 }
