@@ -93,7 +93,7 @@ class ApiController
         $data = json_decode(file_get_contents('php://input'), true);
 
         $foodType = $data['food_type'];
-        $amount = 1;
+        $amount = $data['hp_amount'];
 
         // Validate food type
         $validFoodTypes = ['int_food', 'char_food'];
@@ -109,14 +109,14 @@ class ApiController
         }
 
         // Check if enough food to eat
-        if ($_SESSION[$foodType] < $amount) {
+        if ($_SESSION[$foodType] < 1) {
             http_response_code(400);
             echo json_encode(['error' => 'Not enough food to eat']);
             return;
         }
 
         // Decrease food count
-        $_SESSION[$foodType] -= $amount;
+        $_SESSION[$foodType] -= 1;
         if (isset($_SESSION['hp']) && $_SESSION['hp'] < 100)
         {
             $_SESSION['hp'] += $amount;
