@@ -1,11 +1,7 @@
 <?php
 namespace App\Controllers;
 
-require_once __DIR__ . '/../Models/User.php';
-
-use App\Models\User;
 use App\Utility\Auth;
-use App\Utility\Session;
 
 
 class AuthController

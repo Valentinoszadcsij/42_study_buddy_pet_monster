@@ -1,20 +1,5 @@
 services:
-  mariadb:
-    build:
-      context: .
-      dockerfile: dockerfiles/Dockerfile.mariadb
-    image: mariadb
-    container_name: "mariadb"
-    restart: always
-    ports:
-      - "3306:3306"
-    env_file: ".env"
-    volumes: 
-      - maria-db:/var/lib/mysql
-      - ./mariadb/init-tables.sql:/docker-entrypoint-initdb.d/init-tables.sql
-    networks:
-      - app-network
-  
+
   php:
     build:
       context: .
@@ -24,11 +9,8 @@ services:
     restart: always
     ports:
      - "9000:9000"
-    env_file: ".env"
     volumes:
      - ./src:/var/www/html
-    depends_on:
-      - mariadb
     networks:
      - app-network
   
