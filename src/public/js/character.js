@@ -15,6 +15,11 @@ class Character {
             'Hungry': { from: 12, to: 24 }
         };
 
+        // Animation cycle counter for alternating animations
+        this.animationCycleCount = 0;
+        this.isAutoAnimating = false;
+        this.currentHP = 100;
+
         // Get sprite type from canvas data attribute
         this.spriteType = canvas.dataset.spriteType || 'green';
         console.log('Loading sprite type:', this.spriteType);
@@ -116,11 +121,42 @@ class Character {
             // If we reached the end of current state animation, start over
             if (this.currentFrame > this.states[this.currentState].to) {
                 this.currentFrame = this.states[this.currentState].from;
+
+                // When animation cycle completes and HP < 50, alternate between Hungry and Idle
+                if (this.isAutoAnimating && this.currentHP < 50) {
+                    this.animationCycleCount++;
+
+                    // Pattern: 3x Idle, 1x Hungry
+                    if (this.currentState === 'Hungry') {
+                        // After Hungry, switch to Idle
+                        this.setState('Idle');
+                    } else if (this.currentState === 'Idle' && this.animationCycleCount >= 3) {
+                        // After 3 Idle cycles, switch to Hungry
+                        this.setState('Hungry');
+                        this.animationCycleCount = 0;
+                    }
+                }
             }
         }
 
         this.draw();
         requestAnimationFrame(() => this.animate());
+    }
+
+    // Update HP and manage auto animation
+    updateHP(hp) {
+        this.currentHP = hp;
+
+        // Enable auto-animation when HP < 50
+        if (hp < 50 && !this.isAutoAnimating) {
+            this.isAutoAnimating = true;
+            this.animationCycleCount = 0;
+            console.log('Auto-animation enabled: HP < 50');
+        } else if (hp >= 50 && this.isAutoAnimating) {
+            this.isAutoAnimating = false;
+            this.setState('Idle');
+            console.log('Auto-animation disabled: HP >= 50');
+        }
     }
 
     // Methods for changing character state
