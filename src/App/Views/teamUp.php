@@ -1,34 +1,59 @@
+<?php
+// === Utility: Adjust brightness for coalition color ===
+function adjustBrightness($hex, $steps) {
+    $hex = str_replace('#', '', $hex);
+    if (strlen($hex) !== 6) return '#888888';
+
+    $r = hexdec(substr($hex, 0, 2));
+    $g = hexdec(substr($hex, 2, 2));
+    $b = hexdec(substr($hex, 4, 2));
+
+    $r = max(0, min(255, $r + $steps));
+    $g = max(0, min(255, $g + $steps));
+    $b = max(0, min(255, $b + $steps));
+
+    return sprintf("#%02x%02x%02x", $r, $g, $b);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>42Mochi | TeamUp - <?= htmlspecialchars($displayname ?? 'Guest') ?></title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/game.css">
-
   <link rel="stylesheet" href="/css/teamup.css">
-
-  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <!-- Coalition Color Theme -->
+  <style>
+    :root {
+      --coalition-color: <?= htmlspecialchars($coalition_color ?? '#6abc3a') ?>;
+      --coalition-color-light: <?= htmlspecialchars(adjustBrightness($coalition_color ?? '#6abc3a', 30)) ?>;
+      --coalition-color-dark: <?= htmlspecialchars(adjustBrightness($coalition_color ?? '#6abc3a', -40)) ?>;
+    }
+  </style>
 </head>
 
-<body class="bg-secondary">
+<body class="bg-secondary" data-coalition="<?= htmlspecialchars($coalition ?? 'None') ?>">
 
-    <nav class="navbar">
-        <div class="nav-buttons">
-            <button onclick="window.location.href='/home'">42Mochi</button>
-            <button onclick="window.location.href='/teamup'">TeamUp</button>
-            <button class="active" onclick="window.location.href='/friends'">Friends</button>
-        </div>
-    </nav>
+  <nav class="navbar">
+    <div class="nav-buttons">
+      <button onclick="window.location.href='/home'">42Mochi</button>
+      <button class="active" onclick="window.location.href='/teamup'">TeamUp</button>
+      <button onclick="window.location.href='/friends'">Friends</button>
+    </div>
+  </nav>
 
   <main class="content-box">
     <h1>TeamUp</h1>
 
-    <!-- Find a Partner -->
+    <!-- 🔹 Find a Partner -->
     <section>
-      <h2> Find a Partner</h2>
+      <h2>Find a Partner</h2>
 
       <div class="card post" onclick="openViewModal('Minishell','JohnDoe','Looking for a partner with solid heredoc & signals handling. Bonus if you’ve done parsing!')">
         <div class="card-title"><strong>Minishell</strong></div>
@@ -49,7 +74,7 @@
       </div>
     </section>
 
-    <!-- My Open Posts -->
+    <!-- 🔹 My Open Posts -->
     <section>
       <h2>My Open Posts</h2>
 
@@ -60,14 +85,14 @@
       </div>
     </section>
 
-    <!-- Create New Post -->
+    <!-- 🔹 Create New Post -->
     <section>
       <h2>➕ Create a New Post</h2>
       <button class="btn btn-primary new-post-btn" onclick="openCreateModal()">+ New Post</button>
     </section>
   </main>
 
-  <!-- View Post Modal -->
+  <!-- 🔹 View Post Modal -->
   <div id="viewModalOverlay" class="modal-overlay" onclick="closeModal(event)">
     <div class="modal-base" id="viewModalBox">
       <h3 id="modalProject"></h3>
@@ -77,10 +102,10 @@
     </div>
   </div>
 
-  <!-- Create Post Modal -->
+  <!-- 🔹 Create Post Modal -->
   <div id="createModalOverlay" class="modal-overlay" onclick="closeModal(event)">
     <div class="modal-base new-post-modal" id="createModalBox" onclick="event.stopPropagation()">
-      <h3> Create a New Post</h3>
+      <h3>Create a New Post</h3>
       <form onsubmit="submitPost(event)">
         <label for="projectName">Project Name:</label>
         <input type="text" id="projectName" placeholder="e.g. Minishell" required>
