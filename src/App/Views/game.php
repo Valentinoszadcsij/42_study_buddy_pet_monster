@@ -1,14 +1,43 @@
+<?php
+// Function to adjust color brightness
+function adjustBrightness($hex, $steps) {
+    // Remove # if present
+    $hex = str_replace('#', '', $hex);
+
+    // Convert to RGB
+    $r = hexdec(substr($hex, 0, 2));
+    $g = hexdec(substr($hex, 2, 2));
+    $b = hexdec(substr($hex, 4, 2));
+
+    // Adjust brightness
+    $r = max(0, min(255, $r + $steps));
+    $g = max(0, min(255, $g + $steps));
+    $b = max(0, min(255, $b + $steps));
+
+    // Convert back to hex
+    return '#' . str_pad(dechex($r), 2, '0', STR_PAD_LEFT)
+              . str_pad(dechex($g), 2, '0', STR_PAD_LEFT)
+              . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>42Buddy</title>
+    <title>42Buddy - <?= htmlspecialchars($displayname ?? 'Guest') ?></title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/game.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --coalition-color: <?= htmlspecialchars($coalition_color ?? '#6abc3a') ?>;
+            --coalition-color-dark: <?= htmlspecialchars(adjustBrightness($coalition_color ?? '#6abc3a', -20)) ?>;
+            --coalition-color-light: <?= htmlspecialchars(adjustBrightness($coalition_color ?? '#6abc3a', 30)) ?>;
+        }
+    </style>
 </head>
-<body class="bg-secondary">
+<body class="bg-secondary" data-coalition="<?= htmlspecialchars($coalition ?? 'None') ?>">
     <nav class="navbar">
         <div class="nav-buttons">
 		    <button>42Buddy</button>
@@ -24,7 +53,10 @@
         </div>
 
         <div class="center-content">
-            <div class="intraname">vpushkar</div>
+            <div class="intraname"><?= htmlspecialchars($displayname ?? 'Guest') ?></div>
+            <div class="coalition-badge" style="background-color: var(--coalition-color);">
+                <?= htmlspecialchars($coalition ?? 'No Coalition') ?>
+            </div>
             <div class="character-section">
                 <canvas id="characterCanvas" width="256" height="256"></canvas>
                 <div class="hp-container">

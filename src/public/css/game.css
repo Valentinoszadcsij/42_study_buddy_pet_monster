@@ -24,7 +24,7 @@ body {
 /* Button styles */
 button {
   color: #fff;
-  background-color: #045153;
+  background-color: var(--coalition-color, #045153);
   padding: 15px 40px 15px 40px;
   margin: 10px;
   font-size: 14px;
@@ -32,32 +32,30 @@ button {
   border: 0;
   box-shadow: 0px 5px black, 0px -5px black, 5px 0px black, -5px 0px black, 0px 10px #00000038, 5px 5px #00000038, -5px 5px #00000038, inset 0px 5px #ffffff36;
   cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+button:hover {
+  background-color: var(--coalition-color-light, #056163);
 }
 
 button:active {
   transform: translateY(5px);
   box-shadow: 0px 5px black, 0px -5px black, 5px 0px black, -5px 0px black, inset 0px 5px #00000038;
+  background-color: var(--coalition-color-dark, #034143);
 }
 
-/* Special colors for different buttons */
-.nav-buttons button:nth-child(1) {
-    background-color: #045153;
-}
-.nav-buttons button:nth-child(2) {
-    background-color: #045153;
-}
-.nav-buttons button:nth-child(3) {
-    background-color: #045153;
-}
-
-.right-side button:nth-child(1) {
-    background-color: #045153;
-}
-.right-side button:nth-child(2) {
-    background-color: #045153;
-}
-.right-side button:nth-child(3) {
-    background-color: #045153;
+/* Coalition badge */
+.coalition-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 10px 0;
+  font-family: "Press Start 2P", system-ui;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 4px;
+  box-shadow: 0px 3px black, 0px -3px black, 3px 0px black, -3px 0px black;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
 }
 
 /* HP Bar styles */
@@ -267,8 +265,8 @@ button:active {
 .intraname {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 1rem;
-  color: #045153;
+  margin-bottom: 0.5rem;
+  color: var(--coalition-color, #045153);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   padding: 0.5em 1em;
   /* background: linear-gradient(45deg, #1A2B3C, #22374A); */
@@ -386,8 +384,16 @@ button:active {
     box-shadow: 0px 3px black, 0px -3px black, 3px 0px black, -3px 0px black;
 }
 
+.store-tabs button:hover {
+    background-color: var(--coalition-color-dark, #034143);
+}
+
 .store-tabs button.active {
-    background-color: #045153;
+    background-color: var(--coalition-color, #045153);
+}
+
+.store-tabs button.active:hover {
+    background-color: var(--coalition-color-light, #056163);
 }
 
 .tab-content {
@@ -428,8 +434,16 @@ button:active {
 .buy-button {
     padding: 8px 15px;
     font-size: 12px;
-    background-color: #6abc3a;
+    background-color: var(--coalition-color, #6abc3a);
     box-shadow: 0px 3px black, 0px -3px black, 3px 0px black, -3px 0px black;
+}
+
+.buy-button:hover {
+    background-color: var(--coalition-color-light, #7bcd4b);
+}
+
+.buy-button:active {
+    background-color: var(--coalition-color-dark, #59ab29);
 }
 
 .inventory-grid {

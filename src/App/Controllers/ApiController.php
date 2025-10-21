@@ -20,13 +20,31 @@ class ApiController
         if (!isset($_SESSION['int_food'])) $_SESSION['int_food'] = 0;
         if (!isset($_SESSION['char_food'])) $_SESSION['char_food'] = 0;
 
+        // Get coalition and user info if available
+        $coalition = 'None';
+        $coalition_color = '#6abc3a';
+        $displayname = 'Guest';
+
+        if (isset($_SESSION['coalition_info'])) {
+            $coalition = $_SESSION['coalition_info']['coalition'] ?? 'None';
+            $coalition_color = $_SESSION['coalition_info']['color'] ?? '#6abc3a';
+        }
+
+        if (isset($_SESSION['user_info'])) {
+            $user = $_SESSION['user_info'];
+            $displayname = $user['usual_full_name'] ?? $user['displayname'] ?? 'Guest';
+        }
+
         header('Content-Type: application/json');
         echo json_encode([
             'hp' => $_SESSION['hp'],
             'days' => $_SESSION['days'],
             'coins' => $_SESSION['coins'],
             'int_food' => $_SESSION['int_food'],
-            'char_food' => $_SESSION['char_food']
+            'char_food' => $_SESSION['char_food'],
+            'coalition' => $coalition,
+            'coalition_color' => $coalition_color,
+            'displayname' => $displayname
         ]);
     }
 
