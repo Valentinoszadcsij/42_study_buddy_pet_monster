@@ -58,7 +58,7 @@ function adjustBrightness($hex, $steps) {
                 <?= htmlspecialchars($coalition ?? 'No Coalition') ?>
             </div>
             <div class="character-section">
-                <canvas id="characterCanvas" width="256" height="256"></canvas>
+                <canvas id="characterCanvas" width="256" height="256" data-sprite-type="<?= htmlspecialchars($sprite_type ?? 'green') ?>"></canvas>
                 <div class="hp-container">
                     <div class="hp-text">HP: 100%</div>
                     <svg class="healthbar" xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 38 9" shape-rendering="crispEdges">

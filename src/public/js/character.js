@@ -15,21 +15,44 @@ class Character {
             'Hungry': { from: 12, to: 24 }
         };
 
+        // Get sprite type from canvas data attribute
+        this.spriteType = canvas.dataset.spriteType || 'green';
+        console.log('Loading sprite type:', this.spriteType);
+
         // Load sprites and JSON
         this.loadAssets();
     }
 
     async loadAssets() {
         try {
+            // Determine sprite file names based on type
+            let jsonFile = '/js/sprites/mochi-green-idlehappyhungry.json';
+            let pngFile = '/images/sprites/mochi-green-idlehappyhungry.png';
+
+            if (this.spriteType === 'red') {
+                jsonFile = '/js/sprites/mochi-red-idlehappyhungry.json';
+                pngFile = '/images/sprites/mochi-red-idlehappyhungry.png';
+            } else if (this.spriteType === 'purple') {
+                jsonFile = '/js/sprites/mochi-purple-idlehappyhungry.json';
+                pngFile = '/images/sprites/mochi-purple-idlehappyhungry.png';
+            }
+
+            console.log('Loading JSON:', jsonFile);
+            console.log('Loading PNG:', pngFile);
+
             // Load sprite description JSON
-            const response = await fetch('/js/sprites/mochi-idlehappyhungry.json');
+            const response = await fetch(jsonFile);
             this.spriteData = await response.json();
 
             // Load sprite sheet image
-            this.spriteSheet.src = '/images/sprites/mochi-idlehappyhungry.png';
+            this.spriteSheet.src = pngFile;
             this.spriteSheet.onload = () => {
+                console.log('Sprite sheet loaded successfully!');
                 // Start animation after loading
                 this.animate();
+            };
+            this.spriteSheet.onerror = () => {
+                console.error('Failed to load sprite sheet:', pngFile);
             };
         } catch (error) {
             console.error('Error loading assets:', error);

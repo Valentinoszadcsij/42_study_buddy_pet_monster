@@ -26,6 +26,27 @@ class HomeController
             $coalition_color = $_SESSION['coalition_info']['color'];
         }
 
+        // Determine sprite type based on coalition color
+        $sprite_type = 'green'; // Default
+        $color_lower = strtolower($coalition_color);
+
+        // Detect color from hex code
+        if (preg_match('/#([0-9a-f]{6})/i', $color_lower, $matches)) {
+            $hex = $matches[1];
+            $r = hexdec(substr($hex, 0, 2));
+            $g = hexdec(substr($hex, 2, 2));
+            $b = hexdec(substr($hex, 4, 2));
+
+            // Determine dominant color
+            if ($r > $g && $r > $b && $r > 150) {
+                $sprite_type = 'red';
+            } elseif ($b > $r && $b > $g && $b > 150) {
+                $sprite_type = 'purple';
+            } else {
+                $sprite_type = 'green';
+            }
+        }
+
         include __DIR__ . "/../Views/game.php";
     }
 }
