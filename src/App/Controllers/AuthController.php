@@ -32,7 +32,6 @@ class AuthController
     }
 
 
-
     public function callback()
     {
         // var_dump($_SESSION['end_url']);
@@ -40,9 +39,10 @@ class AuthController
 
         // --- 1️⃣ Verify we have code + state ---
         if (!isset($_GET['code']) || !isset($_GET['state']) || $_GET['state'] !== ($_SESSION['state'] ?? '')) {
-            die("Invalid or missing state.");
+            die("Invalid or missing state. Check that your REDIRECT_URI matches in config.php and Intra 42 app settings exactly.");
         }
         $config = require dirname(__DIR__) . '/Utility/config.php';
+
         // --- 2️⃣ Exchange code for token ---
         $fields = [
             'grant_type'    => 'authorization_code',
@@ -56,14 +56,21 @@ class AuthController
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $fields
+            CURLOPT_POSTFIELDS => $fields,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false
         ]);
         $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            die("<pre>cURL Error: " . curl_error($ch) . "</pre>");
+        }
+
         curl_close($ch);
 
         $data = json_decode($response, true);
         if (!isset($data['access_token'])) {
-            die("<pre>Failed to get token:\n$response</pre>");
+            die("<pre>Failed to get token (Intra 42 responded):\n$response</pre>");
         }
 
         // --- 3️⃣ Store everything in session ---
@@ -84,7 +91,9 @@ class AuthController
         $ch = curl_init("https://api.intra.42.fr/v2/me");
         curl_setopt_array($ch, [
             CURLOPT_HTTPHEADER => ["Authorization: Bearer $access_token"],
-            CURLOPT_RETURNTRANSFER => true
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false
         ]);
         $user_json = curl_exec($ch);
         curl_close($ch);
@@ -103,7 +112,9 @@ class AuthController
                 $ch = curl_init($coal_url);
                 curl_setopt_array($ch, [
                     CURLOPT_HTTPHEADER => ["Authorization: Bearer $access_token"],
-                    CURLOPT_RETURNTRANSFER => true
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false
                 ]);
                 $coal_json = curl_exec($ch);
                 curl_close($ch);
@@ -125,7 +136,6 @@ class AuthController
 
     public function logout()
     {
-
         // Expire the session cookie on the client
         if (ini_get("session.use_cookies")) {
 
