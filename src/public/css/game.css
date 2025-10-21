@@ -121,6 +121,25 @@ button:active {
    fill: var(--bar-top);
 }
 
+/* Days Alive counter */
+.days-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.days-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 2px solid #FFD700;
+}
+
 :root {
   --exp-fill: #0396FF;
   --exp-top: #32CCFF;
@@ -379,4 +398,74 @@ button:active {
 
 .tab-content.active {
     display: block;
+}
+
+.store-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #e0e0e0;
+    border: 2px solid #323c39;
+    cursor: pointer;
+}
+
+.store-item:hover {
+    background-color: #d0d0d0;
+}
+
+.item-icon {
+    font-size: 24px;
+    margin-right: 15px;
+}
+
+.item-name {
+    flex-grow: 1;
+    font-size: 14px;
+}
+
+.buy-button {
+    padding: 8px 15px;
+    font-size: 12px;
+    background-color: #6abc3a;
+    box-shadow: 0px 3px black, 0px -3px black, 3px 0px black, -3px 0px black;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.inventory-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background-color: #e0e0e0;
+    border: 2px solid #323c39;
+}
+
+.inventory-item .item-icon {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.inventory-item .item-name {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.inventory-item .item-count {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.eat-button {
+    padding: 5px 10px;
+    font-size: 10px;
+    background-color: #d83434;
+    box-shadow: 0px 2px black, 0px -2px black, 2px 0px black, -2px 0px black;
 }

@@ -119,7 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('characterCanvas');
     const character = new Character(canvas);
 
-    // Add handlers for testing different states
-    document.querySelector('.exp-btn').addEventListener('click', () => character.makeHappy());
-    document.querySelector('.lvl-btn').addEventListener('click', () => character.makeHungry());
+    // Add handlers for testing different states (only if buttons exist)
+    const expBtn = document.querySelector('.exp-btn');
+    const lvlBtn = document.querySelector('.lvl-btn');
+
+    if (expBtn) {
+        expBtn.addEventListener('click', () => character.makeHappy());
+    }
+    if (lvlBtn) {
+        lvlBtn.addEventListener('click', () => character.makeHungry());
+    }
+
+    // Make character globally accessible for testing
+    window.character = character;
 });

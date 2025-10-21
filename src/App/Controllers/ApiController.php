@@ -10,6 +10,10 @@ class ApiController
     //all stats are in $_SESSION cookie for now, at some point would be persisted to DB
     public function getMochiStats()
     {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         if (!isset($_SESSION['hp'])) $_SESSION['hp'] = 100;
         if (!isset($_SESSION['days'])) $_SESSION['days'] = 0;
         if (!isset($_SESSION['coins'])) $_SESSION['coins'] = 10;
@@ -42,35 +46,36 @@ class ApiController
         // Get raw POST data and decode it
         $data = json_decode(file_get_contents('php://input'), true);
 
-        $foodType = $data['food_type'];
-        $amount = 1;
+        $foodType = $data['food_type'] ?? null;
+        $price = $data['price'] ?? 0;
 
-        // Validate food type
+        // Validate food type and price
         $validFoodTypes = ['int_food', 'char_food'];
-        if (!in_array($foodType, $validFoodTypes)) {
+        if (!in_array($foodType, $validFoodTypes) || !is_numeric($price) || $price <= 0) {
             http_response_code(400);
-            echo json_encode(['error' => 'Invalid food type']);
-            return;
-        }
-
-        // Validate amount
-        if ($amount <= 0) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Amount must be greater than 0']);
+            echo json_encode(['error' => 'Invalid data provided']);
             return;
         }
 
         // Initialize session values if not set
-        if (!isset($_SESSION[$foodType])) {
-            $_SESSION[$foodType] = 0;
+        if (!isset($_SESSION['coins'])) $_SESSION['coins'] = 0;
+        if (!isset($_SESSION[$foodType])) $_SESSION[$foodType] = 0;
+
+        // Check for sufficient coins
+        if ($_SESSION['coins'] < $price) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Not enough coins']);
+            return;
         }
 
-        // Update session with new amount
-        $_SESSION[$foodType] += $amount;
+        // Process the transaction
+        $_SESSION['coins'] -= $price;
+        $_SESSION[$foodType] += 1;
 
         header('Content-Type: application/json');
         echo json_encode([
             'message' => 'Food purchased successfully',
+            'coins' => $_SESSION['coins'],
             'food_type' => $foodType,
             'new_amount' => $_SESSION[$foodType]
         ]);
@@ -92,8 +97,8 @@ class ApiController
         // Get raw POST data
         $data = json_decode(file_get_contents('php://input'), true);
 
-        $foodType = $data['food_type'];
-        $amount = $data['hp_amount'];
+        $foodType = $data['food_type'] ?? null;
+        $hp_amount = $data['hp_amount'] ?? 10; // Default HP gain is 10
 
         // Validate food type
         $validFoodTypes = ['int_food', 'char_food'];
@@ -103,28 +108,21 @@ class ApiController
             return;
         }
 
-        // Ensure food is set in session
-        if (!isset($_SESSION[$foodType])) {
-            $_SESSION[$foodType] = 0;
-        }
-
-        // Check if enough food to eat
-        if ($_SESSION[$foodType] < 1) {
+        // Ensure food is set in session and is sufficient
+        if (empty($_SESSION[$foodType]) || $_SESSION[$foodType] < 1) {
             http_response_code(400);
             echo json_encode(['error' => 'Not enough food to eat']);
             return;
         }
 
-        // Decrease food count
+        // Decrease food count and increase HP
         $_SESSION[$foodType] -= 1;
-        if (isset($_SESSION['hp']) && $_SESSION['hp'] < 100)
-        {
-            $_SESSION['hp'] += $amount;
-            if ($_SESSION['hp'] > 100) $_SESSION['hp'] == 100; 
-        }
+        $_SESSION['hp'] = min(100, ($_SESSION['hp'] ?? 0) + $hp_amount);
+
         header('Content-Type: application/json');
         echo json_encode([
             'message' => 'Food eaten successfully',
+            'hp' => $_SESSION['hp'],
             'food_type' => $foodType,
             'new_amount' => $_SESSION[$foodType]
         ]);
