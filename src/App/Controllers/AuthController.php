@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 require_once __DIR__ . '/../Models/User.php';
+
 use App\Models\User;
 use App\Utility\Auth;
 use App\Utility\Session;
@@ -11,105 +12,74 @@ class AuthController
 {
     public function index()
     {
-        Session::session_init();
-        if ($_SESSION['user_password'] === "verified")
-        {
-            header('Location: /UserProfile');
-            exit;
-        }
-        if ($_SERVER["REQUEST_METHOD"] === "GET")
-        {
-            include __DIR__ . '/../Views/auth.php';
-            exit;
-        }
-        $email = $_POST['email'] ?? '';
-        $user = User::findByEmail($email);
-        $_SESSION['user_email'] = $email;
-        if ($user)
-        {
-            $_SESSION['user_id'] = $user['id'];
-            header('Location: /Auth/login');
-            exit;
-        }
-        $_SESSION['error'] = "no_user";
-        header('Location: /Auth');
+        session_start();
+        $config = require dirname(__DIR__) . '/Utility/config.php';
+
+        // var_dump($config);
+        // exit;
+        $state = bin2hex(random_bytes(8));
+        $_SESSION['state'] = $state;
+
+        $params = http_build_query([
+            'client_id' => $config['client_id'],
+            'redirect_uri' => $config['redirect_uri'],
+            'response_type' => 'code',
+            'scope' => 'public',
+            'state' => $state
+        ]);
+        $url = $config['authorize_url'] . '?' . $params;
+        header('Location: ' . $url);
         exit;
     }
 
-    public function login()
+
+
+    public function callback()
     {
-        Session::session_init();
-        if ($_SESSION['user_password'] === "verified")
-        {
-            header('Location: /UserProfile');
-            exit;
+        session_start();
+
+        // --- 1️⃣ Verify we have code + state ---
+        if (!isset($_GET['code']) || !isset($_GET['state']) || $_GET['state'] !== ($_SESSION['state'] ?? '')) {
+            die("Invalid or missing state.");
         }
-        elseif (empty($_SESSION['user_id']))
-        {
-            header('Location: /Auth');
-            exit;
-        }
-    
-        if ($_SERVER["REQUEST_METHOD"] === "GET")
-        {
-            include __DIR__ . '/../Views/login.php';
-            exit;
-        }
-        
-        $password = $_POST['password'] ?? '';
-        $user = User::findByEmail($_SESSION['user_email']);
-        if (Auth::verify($user, $password))
-        {
-            header('Location: /UserProfile');
-            exit;
-        }
-        else
-        {
-            header('Location: /Auth/login');
-            exit;
+        $config = require dirname(__DIR__) . '/Utility/config.php';
+        // --- 2️⃣ Exchange code for token ---
+        $fields = [
+            'grant_type'    => 'authorization_code',
+            'client_id'     => $config['client_id'],
+            'client_secret' => $config['client_secret'],
+            'code'          => $_GET['code'],
+            'redirect_uri'  => $config['redirect_uri']
+        ];
+
+        $ch = curl_init($config['token_url']);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $fields
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $data = json_decode($response, true);
+        if (!isset($data['access_token'])) {
+            die("<pre>Failed to get token:\n$response</pre>");
         }
 
- 
-    }
+        // --- 3️⃣ Store everything in session ---
+        $_SESSION['access_token']      = $data['access_token'];
+        $_SESSION['refresh_token']     = $data['refresh_token'] ?? null;
+        $_SESSION['token_expires_in']  = $data['expires_in'] ?? 7200;
+        $_SESSION['token_created_at']  = time();
 
-
-
-    public function register()
-    {
-        Session::session_init();
-        if ($_SESSION['user_password'] === "verified")
-        {
-            header('Location: /UserProfile');
-            exit;
-        }
-        if ($_SERVER["REQUEST_METHOD"] === "GET")
-        {
-            include __DIR__ . ("/../Views/register.php");
-            exit;
+        // set the first login date only once
+        if (!isset($_SESSION['first_login_date'])) {
+            $_SESSION['first_login_date'] = date('Y-m-d');
         }
 
-        $_SESSION['user_name'] = $_POST['name'] ?? '';
-        $_SESSION['user_email'] = $_POST['email'] ?? '';
-        $_SESSION['user_password'] = $_POST['password'] ?? '';
-
-        if (User::findByEmail($_SESSION['user_email'])) {
-            $_SESSION['error'] = "Email already in use.";
-            header('Location: /Auth/register');
-            exit;
-        }
-        if ($confirmation != -1)
-        {
-            $_SESSION['confirmation_code'] = $confirmation;
-            error_log("Reached after sending mail, redirecting to confirm");
-            header('Location: /Auth/confirm');
-            exit;
-        }
-        else
-        {
-            unset($_SESSION);
-            header('Location: /Auth/register');
-            exit;
-        }
+        // --- 4️⃣ Redirect to dashboard ---
+        header('Location: /Dashboard');
+        exit;
     }
 
     public function logout()
