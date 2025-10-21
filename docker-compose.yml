@@ -11,8 +11,6 @@ services:
     env_file: ".env"
     volumes:
      - ./src:/var/www/html
-    depends_on:
-      - mariadb
     networks:
      - app-network
 
@@ -35,7 +33,4 @@ services:
 networks:
   app-network:
     driver: bridge
-volumes:
-  maria-db:
-
 
