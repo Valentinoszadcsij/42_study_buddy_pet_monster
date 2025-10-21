@@ -79,21 +79,21 @@ class DashboardController
         // ============================================================
         // 3️⃣ GAME VARIABLES INITIALIZATION
         // ============================================================
-        if (!isset($_SESSION['mochi_hp'])) $_SESSION['mochi_hp'] = 100;
-        if (!isset($_SESSION['mochi_age'])) $_SESSION['mochi_age'] = 0;
-        if (!isset($_SESSION['int_food'])) $_SESSION['int_food'] = 10;
-        if (!isset($_SESSION['char_food'])) $_SESSION['char_food'] = 10;
-        if (!isset($_SESSION['coins'])) $_SESSION['coins'] = 100;
-        if (!isset($_SESSION['coin_log'])) $_SESSION['coin_log'] = [];
+        if (!isset($_SESSION['hp'])) $_SESSION['hp'] = 100;
+        if (!isset($_SESSION['days'])) $_SESSION['days'] = 0;
+        if (!isset($_SESSION['int_food'])) $_SESSION['int_food'] = 0;
+        if (!isset($_SESSION['char_food'])) $_SESSION['char_food'] = 0;
+        if (!isset($_SESSION['coins'])) $_SESSION['coins'] = 10;
+        if (!isset($_SESSION['logs'])) $_SESSION['logs'] = [];
     
         function log_action($desc, $delta = 0) {
-            $_SESSION['coin_log'][] = [
+            $_SESSION['logs'][] = [
                 'time' => date('Y-m-d H:i:s'),
                 'desc' => $desc,
                 'delta' => $delta
             ];
-            if (count($_SESSION['coin_log']) > 20)
-                $_SESSION['coin_log'] = array_slice($_SESSION['coin_log'], -20);
+            if (count($_SESSION['logs']) > 20)
+                $_SESSION['logs'] = array_slice($_SESSION['logs'], -20);
         }
     
         // ============================================================
@@ -112,14 +112,11 @@ class DashboardController
     
             // 🕓 Simulate full day
             if (isset($_POST['simulate_day'])) {
-                $_SESSION['hunger'] = max(0, $_SESSION['hunger'] - 20);
-                $hp_loss = 0;
-                if ($_SESSION['hunger'] < 30) {
-                    $hp_loss = 10;
-                    $_SESSION['monster_hp'] = max(0, $_SESSION['monster_hp'] - $hp_loss);
-                }
-                $_SESSION['coins'] += 10; // small daily survival reward
-                log_action("A new day passed (-20 Hunger, -$hp_loss HP, +10 coins)", +10);
+                $_SESSION['hp'] = max(0, $_SESSION['hp'] - 12);
+                if ($_SESSION['hp'] == 0) $_SESSION['alive'] = "false";
+                $_SESSION['days'] += 1;
+
+                log_action("A new day passed (-12 HP, +1 day from birth)", +10);
             }
     
             // Feed
@@ -200,7 +197,7 @@ class DashboardController
         $monster_level = $_SESSION['monster_level'];
         $total_coins = $_SESSION['coins'];
         $hunger = $_SESSION['hunger'];
-        $coin_log = array_reverse($_SESSION['coin_log']); // newest first
+        $logs = array_reverse($_SESSION['logs']); // newest first
 
         include __DIR__ . "/../Views/dashboard.php";
     }

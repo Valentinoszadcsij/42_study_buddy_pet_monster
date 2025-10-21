@@ -128,4 +128,14 @@ class ApiController
         ]);
     }
 
+    public function getLogs()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_SESSION['logs']))
+        {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'logs' => $_SESSION['logs']
+            ]);
+        }
+    }
 }
