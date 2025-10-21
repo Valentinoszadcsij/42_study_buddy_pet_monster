@@ -22,7 +22,6 @@ services:
     container_name: "nginx"
     restart: "always"
     ports:
-      - "8443:443"
       - "8080:80"
     volumes:
       - ./src:/var/www/html
