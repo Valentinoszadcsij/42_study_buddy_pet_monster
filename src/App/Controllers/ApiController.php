@@ -76,4 +76,58 @@ class ApiController
         ]);
     }
 
+    public function eatFood()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Only accept POST requests
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405); // Method Not Allowed
+            echo json_encode(['error' => 'Only POST requests are allowed.']);
+            return;
+        }
+
+        // Get raw POST data
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $foodType = $data['food_type'];
+        $amount = 1;
+
+        // Validate food type
+        $validFoodTypes = ['int_food', 'char_food'];
+        if (!in_array($foodType, $validFoodTypes)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid food type']);
+            return;
+        }
+
+        // Ensure food is set in session
+        if (!isset($_SESSION[$foodType])) {
+            $_SESSION[$foodType] = 0;
+        }
+
+        // Check if enough food to eat
+        if ($_SESSION[$foodType] < $amount) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Not enough food to eat']);
+            return;
+        }
+
+        // Decrease food count
+        $_SESSION[$foodType] -= $amount;
+        if (isset($_SESSION['hp']) && $_SESSION['hp'] < 100)
+        {
+            $_SESSION['hp'] += $amount;
+            if ($_SESSION['hp'] > 100) $_SESSION['hp'] == 100; 
+        }
+        header('Content-Type: application/json');
+        echo json_encode([
+            'message' => 'Food eaten successfully',
+            'food_type' => $foodType,
+            'new_amount' => $_SESSION[$foodType]
+        ]);
+    }
+
 }
